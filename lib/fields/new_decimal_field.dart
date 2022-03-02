@@ -123,7 +123,6 @@ class NewDecimalFieldState extends State<NewDecimalField> {
 ///
 class NewDecimalEditingController extends TextEditingController {
   final NewDecimalValidator validator;
-  String _lastChange = '';
 
   ///
   ///
@@ -175,14 +174,19 @@ class NewDecimalEditingController extends TextEditingController {
     if (pos < sepPos + 1) {
       // Parte Inteira
       print('Parte Inteira');
-      decimal = parse(text);
+      Decimal newDecimal = parse(text);
+      String newText = format(newDecimal);
+
+      print('Lenght old: ${text.length} // Length new: ${newText.length}');
+
+      decimal = newDecimal;
     } else {
       // Parte Decimal
       print('Parte Decimal');
       if (pos > 0) {
         String lastChar = text.characters.elementAt(pos - 1);
         print('Last Char: $lastChar');
-        decimal = parse(text);
+        // decimal = parse(text);
       }
     }
 
@@ -193,8 +197,8 @@ class NewDecimalEditingController extends TextEditingController {
   ///
   ///
   set decimal(Decimal dec) {
-    String masked = validator.format(dec);
-    if (masked != super.text) {
+    String masked = format(dec);
+    if (masked != text) {
       text = masked;
     }
   }
@@ -209,6 +213,11 @@ class NewDecimalEditingController extends TextEditingController {
   ///
   Decimal parse(String? text) =>
       validator.parse(text) ?? Decimal(precision: validator.precision);
+
+  ///
+  ///
+  ///
+  String format(Decimal decimal) => validator.format(decimal);
 
   ///
   ///

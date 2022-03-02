@@ -20,7 +20,9 @@ class NewDecimalValidator extends AbstractValidator<Decimal>
     this.decimalSeparator = ',',
     this.thousandSeparator = '.',
   })  : assert(
-            precision >= 0, 'precision must be equals or greater than zero.'),
+          precision >= 0,
+          'precision must be equals or greater than zero.',
+        ),
         super(<TextInputFormatter>[
           FilteringTextInputFormatter.allow(
             RegExp('[0-9$decimalSeparator]'),
