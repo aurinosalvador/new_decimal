@@ -138,6 +138,8 @@ class NewDecimalEditingController extends TextEditingController {
   ///
   ///
   void _changeListener() {
+    print('S ===========');
+
     if (text.isEmpty) {
       decimal = Decimal(precision: validator.precision);
       selection = TextSelection.collapsed(
@@ -145,10 +147,10 @@ class NewDecimalEditingController extends TextEditingController {
             validator.precision -
             validator.decimalSeparator.length,
       );
+      print('F2 ==========');
       return;
     }
 
-    print('==========');
     print('- Text: $text');
 
     int sepPos = text.indexOf(validator.decimalSeparator);
@@ -163,13 +165,14 @@ class NewDecimalEditingController extends TextEditingController {
             validator.precision -
             validator.decimalSeparator.length,
       );
+      print('F3 ==========');
       return;
     }
 
     int pos = selection.baseOffset;
     print('Position: $pos');
 
-    if (pos < sepPos) {
+    if (pos < sepPos + 1) {
       // Parte Inteira
       print('Parte Inteira');
       decimal = parse(text);
@@ -179,10 +182,11 @@ class NewDecimalEditingController extends TextEditingController {
       if (pos > 0) {
         String lastChar = text.characters.elementAt(pos - 1);
         print('Last Char: $lastChar');
+        decimal = parse(text);
       }
     }
 
-    // print(super.value);
+    print('F1 ==========');
   }
 
   ///
@@ -190,12 +194,8 @@ class NewDecimalEditingController extends TextEditingController {
   ///
   set decimal(Decimal dec) {
     String masked = validator.format(dec);
-
     if (masked != super.text) {
-      _lastChange = masked;
       text = masked;
-      // } else {
-      //   print('controller: no change.');
     }
   }
 

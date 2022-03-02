@@ -61,8 +61,6 @@ class NewDecimalValidator extends AbstractValidator<Decimal>
         .reversed
         .toList();
 
-    print('format - Parts: $parts');
-
     int start = precision + 4;
     if (precision > 0) {
       parts.insert(precision, decimalSeparator);
@@ -96,17 +94,25 @@ class NewDecimalValidator extends AbstractValidator<Decimal>
       return decimal;
     }
 
-    List<String> parts = _internalStrip(value).split('').toList();
+    int sepPos = value.indexOf(decimalSeparator);
 
-    if (precision > 0) {
-      for (int i = parts.length; i <= precision; i++) {
-        parts.insert(0, '0');
-      }
+    String integerPart = '0';
+    String decimalPart = '0';
 
-      parts.insert(parts.length - precision, '.');
+    if (sepPos < 0) {
+      integerPart = value;
+    } else if (sepPos == 0) {
+      decimalPart = _internalStrip(value);
+    } else {
+      integerPart = _internalStrip(value.substring(0, sepPos));
+      decimalPart = _internalStrip(value.substring(sepPos));
     }
 
-    String s = parts.join();
+    if (decimalPart.length > precision) {
+      decimalPart = decimalPart.substring(0, precision);
+    }
+
+    String s = '$integerPart.$decimalPart';
 
     double? d = double.tryParse(s);
 
