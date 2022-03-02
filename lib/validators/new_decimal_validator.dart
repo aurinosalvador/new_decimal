@@ -72,9 +72,7 @@ class NewDecimalValidator extends AbstractValidator<Decimal>
       parts.insert(i, thousandSeparator);
     }
 
-    String masked = parts.reversed.join();
-
-    return masked;
+    return parts.reversed.join();
   }
 
   ///
