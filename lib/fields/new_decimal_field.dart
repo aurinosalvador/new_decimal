@@ -137,7 +137,10 @@ class NewDecimalEditingController extends TextEditingController {
   ///
   ///
   void _changeListener() {
-    print('S ===========');
+    String _id = DateTime.now().millisecondsSinceEpoch.toRadixString(16);
+    _id = _id.substring(_id.length - 5);
+
+    print('S $_id ===========');
 
     if (text.isEmpty) {
       decimal = Decimal(precision: validator.precision);
@@ -146,51 +149,69 @@ class NewDecimalEditingController extends TextEditingController {
             validator.precision -
             validator.decimalSeparator.length,
       );
-      print('F2 ==========');
+      print('F2 $_id ==========');
       return;
     }
 
     print('- Text: $text');
 
-    int sepPos = text.indexOf(validator.decimalSeparator);
-    print('Sep Pos: $sepPos');
+    int separatorPos = text.indexOf(validator.decimalSeparator);
+    print('Separator Position: $separatorPos');
 
-    if (sepPos < 0) {
-      decimal = parse(
-        text + List<String>.generate(validator.precision, (_) => '0').join(),
-      );
+    if (separatorPos <= 0) {
+      decimal = parse(text);
       selection = TextSelection.collapsed(
         offset: text.length -
             validator.precision -
             validator.decimalSeparator.length,
       );
-      print('F3 ==========');
+      print('F3 $_id ==========');
       return;
     }
 
-    int pos = selection.baseOffset;
-    print('Position: $pos');
+    int cursorPos = selection.baseOffset;
+    int endPos = selection.extentOffset;
+    print('Cursor Position: $cursorPos // $endPos');
 
-    if (pos < sepPos + 1) {
-      // Parte Inteira
-      print('Parte Inteira');
+    if (cursorPos > 0) {
+      String lastChar = text.characters.elementAt(cursorPos - 1);
+      print('Last Char: $lastChar');
+
+      // if (lastChar == validator.thousandSeparator) {
+      //   print('F4 $_id ==========');
+      //   return;
+      // }
+
       Decimal newDecimal = parse(text);
       String newText = format(newDecimal);
+
+      int delta = newText.length - text.length;
+
+      if (cursorPos < separatorPos + 1) {
+        // Parte Inteira
+        print('Parte Inteira');
+      } else {
+        // Parte Decimal
+        print('Parte Decimal: $delta');
+        delta++;
+      }
 
       print('Lenght old: ${text.length} // Length new: ${newText.length}');
 
       decimal = newDecimal;
-    } else {
-      // Parte Decimal
-      print('Parte Decimal');
-      if (pos > 0) {
-        String lastChar = text.characters.elementAt(pos - 1);
-        print('Last Char: $lastChar');
-        // decimal = parse(text);
+
+      if (selection.extentOffset < 1) {
+        cursorPos += delta;
+        if (cursorPos > text.length) {
+          cursorPos = text.length;
+        }
+        selection = TextSelection.collapsed(
+          offset: cursorPos,
+        );
       }
     }
 
-    print('F1 ==========');
+    print('F1 $_id ========== $cursorPos');
   }
 
   ///

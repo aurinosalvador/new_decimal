@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
               doubleValue: 234,
             ),
             lostFocus: (Decimal decimal) {
-              print('Decimal: ${decimal.doubleValue}');
+              print('Decimal Lost Focus: ${decimal.doubleValue}');
             },
           ),
         ),

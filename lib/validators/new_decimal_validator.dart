@@ -25,7 +25,7 @@ class NewDecimalValidator extends AbstractValidator<Decimal>
         ),
         super(<TextInputFormatter>[
           FilteringTextInputFormatter.allow(
-            RegExp('[0-9$decimalSeparator]'),
+            RegExp('[0-9$decimalSeparator$thousandSeparator]'),
           ),
         ]);
 
