@@ -53,7 +53,9 @@ class DecimalTextFormatter extends TextInputFormatter {
       );
     }
 
-    String newChar = newValue.text.substring(newOffset - 1, newOffset);
+    String newChar = newOffset - 1 < 0
+        ? '0'
+        : newValue.text.substring(newOffset - 1, newOffset);
     if (kDebugMode) {
       print('newChar: $newChar');
     }
@@ -76,8 +78,14 @@ class DecimalTextFormatter extends TextInputFormatter {
       if (cursorPos <= oldDecimalPos) {
         Map<String, dynamic> oldValueJson = oldValue.toJSON();
         if (kDebugMode) {
-          oldValueJson['selectionBase'] = oldDecimalPos;
-          oldValueJson['selectionExtent'] = oldDecimalPos;
+          oldValueJson['selectionBase'] =
+              isDeleting ? oldDecimalPos - 1 : oldDecimalPos;
+          oldValueJson['selectionExtent'] =
+              isDeleting ? oldDecimalPos - 1 : oldDecimalPos;
+          List<String> parts = oldValue.text.split(decimalSeparator)
+            ..last = ''.padRight(precision, '0');
+
+          oldValueJson['text'] = parts.join(decimalSeparator);
           print('\n');
         }
         return TextEditingValue.fromJSON(oldValueJson);
