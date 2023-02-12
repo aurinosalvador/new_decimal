@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:new_decimal/util/decimal.dart';
+import 'package:new_decimal/util/decimal_text_formatter.dart';
 import 'package:new_decimal/validators/abstract_validator.dart';
 
 ///
@@ -24,8 +25,10 @@ class NewDecimalValidator extends AbstractValidator<Decimal>
           'precision must be equals or greater than zero.',
         ),
         super(<TextInputFormatter>[
-          FilteringTextInputFormatter.allow(
-            RegExp('[0-9$decimalSeparator$thousandSeparator]'),
+          DecimalTextFormatter(
+            precision: precision,
+            decimalSeparator: decimalSeparator,
+            thousandSeparator: thousandSeparator,
           ),
         ]);
 

@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   ///
   ///
   ///
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   ///
   ///
@@ -41,7 +41,7 @@ class MyHomePage extends StatefulWidget {
   ///
   ///
   ///
-  const MyHomePage({Key? key}) : super(key: key);
+  const MyHomePage({super.key});
 
   ///
   ///
@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
           child: NewDecimalField(
             initialValue: Decimal(
               precision: 4,
-              doubleValue: 234,
+              // doubleValue: 234,
             ),
             lostFocus: (Decimal decimal) {
               print('Decimal Lost Focus: ${decimal.doubleValue}');
